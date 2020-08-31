@@ -11,7 +11,7 @@ class ZABST
 	{
 		int objectHash = 0;
 		for (int i = 0; i < objectName.Length(); i++)
-			objectHash = 31 * objectHash + objectName.CharCodeAt(i);
+			objectHash = 31 * objectHash + objectName.ByteAt(i);
 		return objectHash;
 	}
 	
