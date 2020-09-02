@@ -15,14 +15,16 @@ class ZABST
 		return objectHash;
 	}
 	
-	int Count(ZABST_Node Tree)
+	int Count() { return _count(root); }
+	
+	private int _count(ZABST_Node Tree)
 	{
 		int crtn = 0;
 		if (Tree != null)
 		{
 			crtn++;
-			crtn += Count(Tree.Left);
-			crtn += Count(Tree.Right);
+			crtn += _count(Tree.Left);
+			crtn += _count(Tree.Right);
 		}
 		return crtn;
 	}
