@@ -15,6 +15,24 @@ class ZABST
 		return objectHash;
 	}
 	
+	int Count(ZABST_Node Tree)
+	{
+		int crtn = 0;
+		if (Tree != null)
+		{
+			crtn++;
+			crtn += Count(Tree.Left);
+			crtn += Count(Tree.Right);
+		}
+		return crtn;
+	}
+	
+	/*
+		Public Insert Method
+		Args: 	Data, reference to the Object-inheriting class
+				objectName, this is a unique identifier for the node.
+	
+	*/
 	void Insert(Object Data, string objectName)
 	{
 		if (Root == null)
@@ -157,10 +175,16 @@ class ZABST
 
 		_rotateRightRight(beRotated);
 	}
+
+	/*
+		Public Find Method
+		Args: 	objectName, unique name of the node
+		Return:	ZABST_Node with the same name otherwise null
 	
-	ZABST_Node Find(string DataName)
+	*/	
+	ZABST_Node Find(string objectName)
 	{
-		return _find(GetNameHash(DataName), root);
+		return _find(GetNameHash(objectName), root);
 	}
 	
 	private ZABST_Node _find(int DataHash, ZABST_Node node)
@@ -177,14 +201,52 @@ class ZABST
 			return null;
 	}
 	
-	void Delete(string DataName)
+	/*
+		Public Delete Method
+		Args:	objectName, unique name of the node
+		
+		NOTE! DOES NOT CURRENTLY HEIGHT BALANCE
+		
+	*/
+	void Delete(string objectName)
 	{
-		_delete(GetNameHash(DataName), root);
+		_delete(GetNameHash(objectName), root);
 	}
 	
-	private void _delete(int DataHash, ZABST_Node node)
+	private void _delete(int dataHash, ZABST_Node node)
 	{
-		// needs finished
+		// Find the node
+		if (dataHash < node.Hash) // look to the left
+			_delete(dataHash, node.Left);
+		else if (dataHash > node.Hash) // look to the right
+			_delete(dataHash, node.Right);
+		else // got it
+		{
+			// single child checks - node is just eliminated
+			if (node.Left == null)
+				node = node.Right;
+			else if (node.Right == null)
+				node = node.Left;
+			// both children are occupied
+			else
+			{
+				ZABST_Node newParent = getPredecessor(node.Left.Hash, node.Left);
+				if (newParent)
+				{
+					node.ObjectName = newParent.ObjectName;
+					node.Hash = newParent.Hash;
+					node.Data = newParent.Data;
+					_delete(node.Left.Hash, node.Left);
+				}
+			}
+		}
+	}
+	
+	private ZABST_Node getPredecessor(int dataHash, ZABST_Node node)
+	{
+		while (node.Right != null)
+			node = node.Right;
+		return node;
 	}
 }
 
