@@ -250,6 +250,28 @@ class ZABST
 			node = node.Right;
 		return node;
 	}
+	
+	int GetRootBalance() { return getBalance(Root); }
+	
+	int GetBalance(ZABST_Node node)
+	{
+		int bl = 0, 
+			br = 0;
+			
+		if (node.Left != null)
+		{
+			bl++;
+			bl += getBalance(node.Left);
+		}
+		
+		if (node.Right != null)
+		{
+			br++;
+			br += getBalance(node.Right);
+		}
+			
+		return bl - br;
+	}
 }
 
 class ZABST_Node
